@@ -1,0 +1,6 @@
+packrat/lib*/
+.Rproj.user
+.RData
+.Rhistory
+.Rprofile
+gganim_plot*.png
