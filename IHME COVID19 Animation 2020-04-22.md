@@ -1,0 +1,179 @@
+---
+title: "IHME COVID19 Animations"
+author: "Venkatesh L. Murthy, MD, PhD"
+date: 'April 22, 2020'
+output:
+  html_document: 
+    code_folding: hide
+    number_sections: yes
+    theme: flatly
+    toc: yes
+    toc_float: yes
+    keep_md: yes
+knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_file = paste0(substr(inputFile,1,nchar(inputFile)-4)," ",Sys.Date(),'.html')) })
+---
+
+
+
+# IHME Model Over Time
+
+The [Institute for Health Metrics and Evaluation (IHME)](http://covid19.healthdata.org/united-states-of-america) at the University of Washington has released a series of models for COVID19 cases, mortality and hospital resource utilization. These models have evolved over time. Here we plot how these models have changed.
+
+## All 50 States
+![IHME mOdels over time for all 50 states](images/US.gif)
+
+## Alabama
+![IHME mOdels over time for Alabama](images/alabama.gif)
+
+## Alaska
+![IHME mOdels over time for Alaska](images/alaska.gif)
+
+## Arizona
+![IHME mOdels over time for Arizona](images/arizona.gif)
+
+## Arkansas
+![IHME mOdels over time for Arkansas](images/arkansas.gif)
+
+## California
+![IHME mOdels over time for California](images/california.gif)
+
+## Colorado
+![IHME mOdels over time for Colorado](images/colorado.gif)
+
+## Connecticut
+![IHME mOdels over time for Connecticut](images/connecticut.gif)
+
+## Delaware
+![IHME mOdels over time for Delaware](images/delaware.gif)
+
+## District of Columbia
+![IHME mOdels over time for District of Columbia](images/district of columbia.gif)
+
+## Florida
+![IHME mOdels over time for Florida](images/florida.gif)
+
+## Georgia
+![IHME mOdels over time for Georgia](images/georgia.gif)
+
+## Hawaii
+![IHME mOdels over time for Hawaii](images/hawaii.gif)
+
+## Idaho
+![IHME mOdels over time for Idaho](images/idaho.gif)
+
+## Illinois
+![IHME mOdels over time for Illinois](images/illinois.gif)
+
+## Indiana
+![IHME mOdels over time for Indiana](images/indiana.gif)
+
+## Iowa
+![IHME mOdels over time for Iowa](images/iowa.gif)
+
+## Kansas
+![IHME mOdels over time for Kansas](images/kansas.gif)
+
+## Kentucky
+![IHME mOdels over time for Kentucky](images/kentucky.gif)
+
+## Louisiana
+![IHME mOdels over time for Louisiana](images/louisiana.gif)
+
+## Maine
+![IHME mOdels over time for Maine](images/maine.gif)
+
+## Maryland
+![IHME mOdels over time for Maryland](images/maryland.gif)
+
+## Massachusetts
+![IHME mOdels over time for Massachusetts](images/massachusetts.gif)
+
+## Michigan
+![IHME mOdels over time for Michigan](images/michigan.gif)
+
+## Minnesota
+![IHME mOdels over time for Minnesota](images/minnesota.gif)
+
+## Mississippi
+![IHME mOdels over time for Mississippi](images/mississippi.gif)
+
+## Missouri
+![IHME mOdels over time for Missouri](images/missouri.gif)
+
+## Montana
+![IHME mOdels over time for Montana](images/montana.gif)
+
+## Nebraska
+![IHME mOdels over time for Nebraska](images/nebraska.gif)
+
+## Nevada
+![IHME mOdels over time for Nevada](images/nevada.gif)
+
+## New Hampshire
+![IHME mOdels over time for New Hampshire](images/new hampshire.gif)
+
+## New Jersey
+![IHME mOdels over time for New Jersey](images/new jersey.gif)
+
+## New Mexico
+![IHME mOdels over time for New Mexico](images/new mexico.gif)
+
+## New York
+![IHME mOdels over time for New York](images/new york.gif)
+
+## North Carolina
+![IHME mOdels over time for North Carolina](images/north carolina.gif)
+
+## North Dakota
+![IHME mOdels over time for North Dakota](images/north dakota.gif)
+
+## Ohio
+![IHME mOdels over time for Ohio](images/ohio.gif)
+
+## Oklahoma
+![IHME mOdels over time for Oklahoma](images/oklahoma.gif)
+
+## Oregon
+![IHME mOdels over time for Oregon](images/oregon.gif)
+
+## Pennsylvania
+![IHME mOdels over time for Pennsylvania](images/pennsylvania.gif)
+
+## Rhode Island
+![IHME mOdels over time for Rhode Island](images/rhode island.gif)
+
+## South Carolina
+![IHME mOdels over time for South Carolina](images/south carolina.gif)
+
+## South Dakota
+![IHME mOdels over time for South Dakota](images/south dakota.gif)
+
+## Tennessee
+![IHME mOdels over time for Tennessee](images/tennessee.gif)
+
+## Texas
+![IHME mOdels over time for Texas](images/texas.gif)
+
+## Utah
+![IHME mOdels over time for Utah](images/utah.gif)
+
+## Vermont
+![IHME mOdels over time for Vermont](images/vermont.gif)
+
+## Virginia
+![IHME mOdels over time for Virginia](images/virginia.gif)
+
+## Washington
+![IHME mOdels over time for Washington](images/washington.gif)
+
+## West Virginia
+![IHME mOdels over time for West Virginia](images/west virginia.gif)
+
+## Wisconsin
+![IHME mOdels over time for Wisconsin](images/wisconsin.gif)
+
+## Alabama
+![IHME mOdels over time for Alabama](images/Alabama.gif)
+
+## Wyoming
+![IHME mOdels over time for Wyoming](images/wyoming.gif)

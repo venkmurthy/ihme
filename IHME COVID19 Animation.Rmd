@@ -1,5 +1,5 @@
 ---
-title: "IHME COVID19 Animation"
+title: "IHME COVID19 Animations"
 author: "Venkatesh L. Murthy, MD, PhD"
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output:
@@ -15,168 +15,167 @@ knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = e
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(message=TRUE, warning=TRUE, tinytex.verbose=TRUE,dpi=600)
-
-# Load libraries
-library(tidyverse)
-library(xml2)
-library(rvest)
-library(foreach)
-library(gganimate)
-library(usmap)
-library(doParallel)
-
-# Set up parallelization
-registerDoParallel(cores=6)
-options(boot.parallel="multicore")
-options(boot.ncpus=6)
-
-# Define not in operator
-`%!in%` <- compose(`!`, `%in%`)
 ```
 
-```{r download and clean data}
-# URL for main IHME download site
-ihme.url <- "http://www.healthdata.org/covid/data-downloads"
+# IHME Model Over Time
 
-# Subdirectory to store IHME archive data
-data.directory <- "source_data/"
+The [Institute for Health Metrics and Evaluation (IHME)](http://covid19.healthdata.org/united-states-of-america) at the University of Washington has released a series of models for COVID19 cases, mortality and hospital resource utilization. These models have evolved over time. Here we plot how these models have changed.
 
-# Subdirector to store images
-img.directory <- "images/"
+## All 50 States
+![IHME mOdels over time for all 50 states](images/US.gif)
 
-# Download the html page
-ihme.page <- read_html(ihme.url)
+## Alabama
+![IHME mOdels over time for Alabama](images/alabama.gif)
 
-# Get the links and filter to the ones that are latest or archive datasets
-ihme.links <- data.frame(description=ihme.page %>% html_nodes("a") %>% html_text(),
-                         url=ihme.page %>% html_nodes("a") %>% html_attr("href")) %>% 
-  filter(grepl("latest|archive",url)) %>% mutate_if(is.factor,as.character)
+## Alaska
+![IHME mOdels over time for Alaska](images/alaska.gif)
 
-# Clean up descriptions
-ihme.links$description[grepl("latest",ihme.links$url)] <- "latest"
+## Arizona
+![IHME mOdels over time for Arizona](images/arizona.gif)
 
-# Add target file names
-ihme.links$file <- paste0(data.directory,ihme.links$description,".zip")
+## Arkansas
+![IHME mOdels over time for Arkansas](images/arkansas.gif)
 
-# Create the subdirectories if don't exist
-if(!dir.exists(data.directory)) { dir.create(data.directory) }
-if(!dir.exists(img.directory)) { dir.create(img.directory) }
+## California
+![IHME mOdels over time for California](images/california.gif)
 
-# Download all files
-ihme.links$zip.path <- NA
+## Colorado
+![IHME mOdels over time for Colorado](images/colorado.gif)
 
-for (i in 1:dim(ihme.links)[1]) {
-  download.file(ihme.links$url[i],ihme.links$file[i],quiet=TRUE)
-  zip.contents <- unzip(ihme.links$file[i],list=TRUE)
-  ihme.links$zip.path[i] <- zip.contents$Name[grepl("\\.csv",zip.contents$Name)]
-}
+## Connecticut
+![IHME mOdels over time for Connecticut](images/connecticut.gif)
 
-# Find date variables
-ihme.links$date <- coalesce(as.Date(ihme.links$description,"%B %d, %Y"), 
-                            as.Date(substr(ihme.links$zip.path,1,10),"%Y_%m_%d"))
+## Delaware
+![IHME mOdels over time for Delaware](images/delaware.gif)
 
-# Unzip and merge all data
-all.data <- foreach(i=1:dim(ihme.links)[1],.combine=bind_rows) %do% {
-  pred.data <- read.csv(unz(ihme.links$file[i],ihme.links$zip.path[i]))
-  pred.data$pred.date <- ihme.links$date[i]
-  
-  colnames(pred.data)[colnames(pred.data)=="date"] <- "date_reported"
-  
-  pred.data  %>% mutate_if(is.factor,as.character)
-}
+## District of Columbia
+![IHME mOdels over time for District of Columbia](images/district of columbia.gif)
 
-# Remove unnecessary/junk columns
-all.data <- all.data %>% select(!c("V1","X"))
+## Florida
+![IHME mOdels over time for Florida](images/florida.gif)
 
-# Convert date
-all.data$date_reported <- as.Date(all.data$date_reported,"%Y-%m-%d")
+## Georgia
+![IHME mOdels over time for Georgia](images/georgia.gif)
 
-# Define variables that are ID vars
-id.vars <- c("location_name","date_reported","pred.date","location")
+## Hawaii
+![IHME mOdels over time for Hawaii](images/hawaii.gif)
 
-# Grab all non ID vars
-all.vars <- colnames(all.data)[colnames(all.data) %!in% id.vars]
+## Idaho
+![IHME mOdels over time for Idaho](images/idaho.gif)
 
-# Subset vars into groups
-lcl.vars <- all.vars[grepl("_lower",all.vars)]
-est.vars <- all.vars[grepl("_mean",all.vars)]
-ucl.vars <- all.vars[grepl("_upper",all.vars)]
+## Illinois
+![IHME mOdels over time for Illinois](images/illinois.gif)
 
-# Subset lcl, estiamte and ucl data
-lcl.data <- all.data %>% select(all_of(c(id.vars,lcl.vars))) 
-est.data <- all.data %>% select(all_of(c(id.vars,est.vars)))
-ucl.data <- all.data %>% select(all_of(c(id.vars,ucl.vars)))
+## Indiana
+![IHME mOdels over time for Indiana](images/indiana.gif)
 
-# Clean up column names
-colnames(lcl.data) <- gsub("_lower","",colnames(lcl.data))
-colnames(est.data) <- gsub("_mean","",colnames(est.data))
-colnames(ucl.data) <- gsub("_upper","",colnames(ucl.data))
+## Iowa
+![IHME mOdels over time for Iowa](images/iowa.gif)
 
-# Convert to long 
-lcl.data.long <- lcl.data %>% pivot_longer(-all_of(id.vars),values_to="lcl")
-est.data.long <- est.data %>% pivot_longer(-all_of(id.vars),values_to="est")
-ucl.data.long <- ucl.data %>% pivot_longer(-all_of(id.vars),values_to="ucl")
+## Kansas
+![IHME mOdels over time for Kansas](images/kansas.gif)
 
-# Merge long datasets
-all.data.long <- merge(lcl.data.long,est.data.long,by=c(id.vars,"name"))
-all.data.long <- merge(all.data.long,ucl.data.long,by=c(id.vars,"name"))
+## Kentucky
+![IHME mOdels over time for Kentucky](images/kentucky.gif)
 
-# Clean up labels
-all.data.long$name <- recode_factor(all.data.long$name,admis="Admissions",newICU="ICU Admissions",deaths="New Deaths",
-                                    allbed="Bed Use",ICUbed="ICU Bed Use",InvVen="Invasive Ventilator Use",
-                                    totdea="Total Deaths",bedover="Beds Needed Over Capacity",
-                                    icuover="ICU Beds Needed Over Capacity",.ordered=TRUE)
+## Louisiana
+![IHME mOdels over time for Louisiana](images/louisiana.gif)
 
-# Add measured field
-all.data.long$measured <- all.data.long$date_reported > all.data.long$pred.date
-```
+## Maine
+![IHME mOdels over time for Maine](images/maine.gif)
 
-# IHME Model for 50 US States Evolved Over Time
+## Maryland
+![IHME mOdels over time for Maryland](images/maryland.gif)
 
-```{r US Over Time ggplot, warning=FALSE, results=FALSE}
-us.data.long <- all.data.long %>% filter(location_name %in% usmap::statepop$full) %>% filter(location_name!="District of Columbia") %>% filter(as.character(name) %in% c("Bed Use","ICU Bed Use","Invasive Ventilator Use","Total Deaths"))
+## Massachusetts
+![IHME mOdels over time for Massachusetts](images/massachusetts.gif)
 
-us.plot <- ggplot(us.data.long,aes(x=date_reported,y=est,ymin=lcl,ymax=ucl,frame=pred.date,colour=name,fill=name)) +
-  geom_line() +
-  geom_vline(aes(xintercept=pred.date),colour="black",size=1,alpha=0.7) +
-  geom_ribbon(alpha=0.2) + 
-  facet_wrap(~ location_name,scales="free_y",ncol=5) +
-  scale_fill_brewer(type="qual") +
-  scale_colour_brewer(type="qual") +
-  theme_minimal() + 
-  theme(legend.position="bottom",legend.title=element_blank()) +
-  labs(title="Prediction Date: {closest_state}",x="Date",y="Count") +
-  transition_states(pred.date) +
-  ease_aes()
-anim_save(paste0(img.directory,"US.gif"),us.plot,width=1000,height=1500)
+## Michigan
+![IHME mOdels over time for Michigan](images/michigan.gif)
 
-```
+## Minnesota
+![IHME mOdels over time for Minnesota](images/minnesota.gif)
 
+## Mississippi
+![IHME mOdels over time for Mississippi](images/mississippi.gif)
 
+## Missouri
+![IHME mOdels over time for Missouri](images/missouri.gif)
 
-# IHME Model for Each State Separately Over Time
+## Montana
+![IHME mOdels over time for Montana](images/montana.gif)
 
-```{r Each State Over Time ggplot}
-state="Alabama"
-tmp.var <- foreach(state=usmap::statepop$full,.packages=c("tidyverse","gganimate")) %dopar% {
-  state.data.long <- all.data.long %>% filter(location_name == state) %>%
-    filter(as.character(name) %in% c("Bed Use","ICU Bed Use","Invasive Ventilator Use","Total Deaths"))
+## Nebraska
+![IHME mOdels over time for Nebraska](images/nebraska.gif)
 
-  state.plot <- ggplot(state.data.long,aes(x=date_reported,y=est,ymin=lcl,ymax=ucl,frame=pred.date,colour=name,fill=name)) +
-    geom_line() +
-    geom_vline(aes(xintercept=pred.date),colour="grey",size=1,alpha=0.1) +
-    geom_ribbon(alpha=0.2) + 
-    facet_grid(~ location_name,scales="free_y") +
-    scale_fill_brewer(type="qual") +
-    scale_colour_brewer(type="qual") +
-    theme_minimal() + 
-    theme(legend.position="bottom",legend.title=element_blank()) +
-    labs(title="Prediction Date: {closest_state}",x="Date",y="Count") +
-    transition_states(pred.date) +
-    ease_aes()
-  anim_save(paste0(img.directory,tolower(state),".gif"),state.plot,width=450,height=300)
-}
+## Nevada
+![IHME mOdels over time for Nevada](images/nevada.gif)
 
-if(!is.null((tmp.var))) { tmp.var }
-```
+## New Hampshire
+![IHME mOdels over time for New Hampshire](images/new hampshire.gif)
 
+## New Jersey
+![IHME mOdels over time for New Jersey](images/new jersey.gif)
+
+## New Mexico
+![IHME mOdels over time for New Mexico](images/new mexico.gif)
+
+## New York
+![IHME mOdels over time for New York](images/new york.gif)
+
+## North Carolina
+![IHME mOdels over time for North Carolina](images/north carolina.gif)
+
+## North Dakota
+![IHME mOdels over time for North Dakota](images/north dakota.gif)
+
+## Ohio
+![IHME mOdels over time for Ohio](images/ohio.gif)
+
+## Oklahoma
+![IHME mOdels over time for Oklahoma](images/oklahoma.gif)
+
+## Oregon
+![IHME mOdels over time for Oregon](images/oregon.gif)
+
+## Pennsylvania
+![IHME mOdels over time for Pennsylvania](images/pennsylvania.gif)
+
+## Rhode Island
+![IHME mOdels over time for Rhode Island](images/rhode island.gif)
+
+## South Carolina
+![IHME mOdels over time for South Carolina](images/south carolina.gif)
+
+## South Dakota
+![IHME mOdels over time for South Dakota](images/south dakota.gif)
+
+## Tennessee
+![IHME mOdels over time for Tennessee](images/tennessee.gif)
+
+## Texas
+![IHME mOdels over time for Texas](images/texas.gif)
+
+## Utah
+![IHME mOdels over time for Utah](images/utah.gif)
+
+## Vermont
+![IHME mOdels over time for Vermont](images/vermont.gif)
+
+## Virginia
+![IHME mOdels over time for Virginia](images/virginia.gif)
+
+## Washington
+![IHME mOdels over time for Washington](images/washington.gif)
+
+## West Virginia
+![IHME mOdels over time for West Virginia](images/west virginia.gif)
+
+## Wisconsin
+![IHME mOdels over time for Wisconsin](images/wisconsin.gif)
+
+## Alabama
+![IHME mOdels over time for Alabama](images/Alabama.gif)
+
+## Wyoming
+![IHME mOdels over time for Wyoming](images/wyoming.gif)
